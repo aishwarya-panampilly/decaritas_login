@@ -1,43 +1,59 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import avatar from '../assets/profiledecari.png';
-import { Toaster } from 'react-hot-toast';
+import toast,{ Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { profileValidation } from '../helper/validate';
 import convertToBase64  from '../helper/convert';
+import useFetch from '../hooks/fetch.hook';
+import { updateUser } from '../helper/helper'
+import { useNavigate } from 'react-router-dom'
 
 import styles from '../styles/Username.module.css';
-import extend from '../styles/Profile.module.css';
+import extend from '../styles/Profile.module.css'
 
 export default function Profile() {
 
-  const [file, setFile] = useState()
+  const [file, setFile] = useState();
+  const [{ isLoading, apiData, serverError }] = useFetch();
+  const navigate = useNavigate()
   const  formik = useFormik({
     initialValues : {
-      firstName : '',
-      lastName : '',
-      email : '',
-      mobile : '',
-      address : ''
+      firstName : apiData?.firstName || '',
+      lastName : apiData?.lastName || '',
+      email : apiData?.email || '',
+      mobile : apiData?.mobile || '',
+      address : apiData?.address || ''
     },
     validate : profileValidation,
     validateOnBlur: false,
-    validateOnCharge: false,
+    validateOnChange: false,
     onSubmit : async values => {
-      values = await Object.assign(values, {profile : file  || ''})
-      console.log(values)
+      values = await Object.assign(values, {profile : file || apiData?.profile || ''})
+      let updatePromise = updateUser(values);
+      toast.promise(updatePromise, {
+        loading: 'Updating...',
+        success : <b>Update Successfully...!</b>,
+        error: <b>Could not Update!</b>
+
+      });
+
+
     }
   })
 
   /** formik doesnt support file upload so we need to create this handler */
   const onUpload = async e => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const base64 = await convertToBase64(selectedFile);
-      setFile(base64);
-    }
+    const base64 = await convertToBase64(e.target.files[0]);
+    setFile(base64);
   }
 
+  // logout handler function
+  function userLogout(){
+    localStorage.removeItem('token');
+    navigate('/')
+  }
+    if(isLoading) return <h1 className='text-2xl font-bold'>isLoading</h1>;
+    if(serverError) return <h1 className='text-xl text-red-500'>{serverError.message}</h1>
   return (
     <div className="container mx-auto">
 
@@ -50,8 +66,8 @@ export default function Profile() {
 
           <form className = 'py-1' onSubmit={formik.handleSubmit}>
               <div className = 'profile flex justify-center py-4'>
-                <label htmlFor="">
-                  <img src={file || avatar} className = {`${styles.profile_img} ${extend.profile_img}`} alt = "avatar" />
+                <label htmlFor="profile">
+                  <img src={apiData?.profile || file || avatar} className = {`${styles.profile_img} ${extend.profile_img}`} alt = "avatar" />
                 </label>
 
                 <input onChange={onUpload} type="file" id='profile' name ='profile'/>
@@ -75,7 +91,7 @@ export default function Profile() {
             
               </div>
               <div className = "text-center py-4">
-                <span className = 'text-gray-500'>Come back later?<Link className = 'text-red-500' to = "/username">Logout</Link></span>
+                <span className = 'text-gray-500'>Come back later?<button onClick={userLogout} className = 'text-red-500' to = "/username">Logout</button></span>
               </div>
           </form>
         </div>

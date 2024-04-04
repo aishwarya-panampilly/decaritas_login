@@ -33,5 +33,5 @@ connect().then(() => {
         console.log("Cannot connect to server");
     }
 }) .catch (error => {
-    console.log("Invalid databsae connection");
+    console.log("Invalid database connection");
 })
