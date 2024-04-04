@@ -15,10 +15,10 @@ export default function Register() {
   const navigate = useNavigate();
   const  formik = useFormik({
     initialValues : {
-      email : '',
-      username : '',
-      wallet : '',
-      password : ''
+      email : 'email address',
+      username : 'username',
+      wallet : 'wallet address',
+      password : 'password'
     },
     validate : registerValidation,
     validateOnBlur: false,
@@ -32,7 +32,7 @@ export default function Register() {
         error : <b>Could not Register.</b>
       });
       registerPromise.then(function(){ navigate('/')});
-    }
+    },
   })
 
   /** formik doesnt support file upload so we need to create this handler */

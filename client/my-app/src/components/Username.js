@@ -14,7 +14,7 @@ export default function Username() {
   const setUsername = useAuthStore(state => state.setUsername);
   const  formik = useFormik({
     initialValues : {
-      username : ''
+      username : 'username'
     },
     validate : usernameValidate,
     validateOnBlur: false,

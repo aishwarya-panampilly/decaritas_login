@@ -81,9 +81,9 @@ export async function profileValidation(values) {
 
 /** validate password */
 function passwordVerify(errors = {},values) {
-    if(!values.password){
+    /** if(!values.password){
         errors.password = toast.error("Password Required");
-    } else if (values.password.includes(" ")){
+    } else*/ if (values.password.includes(" ")){
         errors.password = toast.error("Wrong Password");
     } 
 
@@ -92,9 +92,9 @@ function passwordVerify(errors = {},values) {
 
 /** validate username */
 function usernameVerify(error = {}, values) {
-    if(!values.username){
+    /** if(!values.username){
         error.username = toast.error('Username Required');
-    }  else if (values.username.includes(" "))  {
+    }  else*/ if (values.username.includes(" "))  {
         error.username = toast.error ('Invalid Username');
     }
 
@@ -144,7 +144,7 @@ function validPasswordVerify(errors = {},values) {
 
 /**validate email */
 function emailVerify(error = {},values) {
-    if (!values.email) {
+    if (values.email = "") {
         error.email = toast.error("Email Required");
     } 
 }
