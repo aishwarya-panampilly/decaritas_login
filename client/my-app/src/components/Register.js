@@ -12,6 +12,7 @@ import styles from '../styles/Username.module.css';
 export default function Register() {
 
   const [file, setFile] = useState()
+  const navigate = useNavigate();
   const  formik = useFormik({
     initialValues : {
       email : '',
