@@ -8,7 +8,6 @@ import { useNavigate, Navigate } from 'react-router-dom';
 import useFetch from '../hooks/fetch.hook'
 
 import styles from '../styles/Username.module.css';
-import { useEffect } from 'react'
 
 
 export default function Reset() {
